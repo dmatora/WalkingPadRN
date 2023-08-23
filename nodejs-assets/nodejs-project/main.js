@@ -1,12 +1,21 @@
-// Rename this sample file to main.js to use on your project.
-// The main.js file will be overwritten in updates/reinstalls.
+const rn_bridge = require('rn-bridge');
+const miio = require('miio');
+let device;
 
-var rn_bridge = require('rn-bridge');
+const setup = async () => {
+  if (device) {
+    return;
+  }
+  device = await miio.device({
+    address: '192.168.0.1',
+    token: '13f18b1ba010f45bc161fd4b1bd160e1',
+  });
+};
 
-// Echo every message received from react-native.
-rn_bridge.channel.on('message', (msg) => {
-  rn_bridge.channel.send(msg);
-} );
+setup();
 
-// Inform react-native node is initialized.
-rn_bridge.channel.send("Node was initialized.");
+rn_bridge.channel.on('message', async msg => {
+  device.call('get_prop', ['state']).then(data => {
+    rn_bridge.channel.send(JSON.stringify(data));
+  });
+});
