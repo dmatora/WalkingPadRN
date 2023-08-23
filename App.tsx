@@ -5,18 +5,19 @@
  * @format
  */
 
-import React from 'react';
+import React, { useEffect } from "react";
 import type {PropsWithChildren} from 'react';
 import {
+  Alert, Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   useColorScheme,
-  View,
-} from 'react-native';
-
+  View
+} from "react-native";
+import nodejs from 'nodejs-mobile-react-native';
 import {
   Colors,
   DebugInstructions,
@@ -62,11 +63,27 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  useEffect(() => {
+    nodejs.start("main.js");
+    const messageListener = (msg) => {
+      Alert.alert("From node: " + msg);
+    };
+    nodejs.channel.addListener("message", messageListener);
+
+    return () => {
+      // Clean up when the component unmounts
+      nodejs.channel.removeListener("message", messageListener);
+    };
+  }, []);
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
+      />
+      <Button title="Message Node"
+              onPress={() => nodejs.channel.send('A message!')}
       />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
