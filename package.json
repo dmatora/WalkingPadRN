@@ -13,7 +13,9 @@
   "dependencies": {
     "nodejs-mobile-react-native": "^16.17.10",
     "react": "18.2.0",
-    "react-native": "0.72.4"
+    "react-native": "0.72.4",
+    "react-native-keep-awake": "^4.0.0",
+    "rn-apple-healthkit": "^0.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
