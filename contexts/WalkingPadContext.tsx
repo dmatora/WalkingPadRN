@@ -1,7 +1,10 @@
 import React, {createContext, ReactNode, useEffect, useState} from 'react';
 import {miioInit, miioSend} from '../libs/miio';
 import {getTodaySteps, initHealthKit, saveSteps} from '../libs/healthKit';
-import KeepAwake from 'react-native-keep-awake';
+import {
+  activateKeepAwake,
+  deactivateKeepAwake,
+} from '@sayem314/react-native-keep-awake';
 
 // Define the shape of the context
 interface WalkingPadContextProps {
@@ -172,10 +175,10 @@ export const WalkingPadProvider: React.FC<WalkingPadProviderProps> = ({
   useEffect(() => {
     updateAuto(!run);
     if (run) {
-      KeepAwake.activate();
+      activateKeepAwake();
       // startMonitoring();
     } else {
-      KeepAwake.deactivate();
+      deactivateKeepAwake();
       // console.log('Clearing interval');
       // clearInterval(interval);
     }
