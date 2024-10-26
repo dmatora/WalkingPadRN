@@ -31,6 +31,10 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Access to your step data allows us to show your WalkingPad steps and total daily activity in one place</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>We save your WalkingPad workout steps to Apple Health to ensure your total daily step count is accurate</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>

@@ -14,7 +14,14 @@
     "react-native-svg-transformer": "*",
     "react-dom": "*",
     "@nx/webpack": "*",
-    "@nx/react": "*"
+    "@nx/react": "*",
+    "@sayem314/react-native-keep-awake": "*",
+    "rn-apple-healthkit": "*",
+    "react-native-quick-crypto": "*",
+    "buffer": "*",
+    "react-native-logs": "*",
+    "react-native-udp": "*",
+    "react-native-miio": "*"
   },
   "devDependencies": {}
 }
