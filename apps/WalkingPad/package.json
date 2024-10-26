@@ -9,6 +9,12 @@
     "react": "*",
     "react-native": "*",
     "react-native-svg": "*",
-    "metro-config": "*"
-  }
+    "metro-config": "*",
+    "@nx/eslint-plugin": "*",
+    "react-native-svg-transformer": "*",
+    "react-dom": "*",
+    "@nx/webpack": "*",
+    "@nx/react": "*"
+  },
+  "devDependencies": {}
 }
