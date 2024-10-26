@@ -1,13 +1,20 @@
 import * as miio from 'react-native-miio';
+import { getSettings } from '../storage';
 
 let device: miio.Device | null = null;
 
 export const miioInit = async () => {
   console.log('miioInit');
+
+  const settings = await getSettings();
+  if (!settings?.ip || !settings?.token) {
+    return false;
+  }
+
   try {
     device = await miio.device({
-      address: '192.168.1.1',
-      token: '12345678901234567890123456789012',
+      address: settings.ip,
+      token: settings.token,
     });
     console.log({ device });
   } catch (e) {

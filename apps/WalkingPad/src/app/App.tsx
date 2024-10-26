@@ -1,11 +1,12 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   AutoPanel,
   ModePanel,
   NextCheck,
   SessionSteps,
   SessionTime,
+  SettingsScreen,
   SpeedPanel,
   StartButton,
   TodaySteps,
@@ -13,17 +14,32 @@ import {
 import { WalkingPadProvider } from './contexts/WalkingPadContext';
 
 const App = (): JSX.Element => {
+  const [showSettings, setShowSettings] = useState(false);
+
   return (
     <WalkingPadProvider>
       <View style={styles.container}>
-        <TodaySteps />
-        <SessionSteps />
-        <SessionTime />
-        <NextCheck />
-        <StartButton />
-        <ModePanel />
-        <SpeedPanel />
-        <AutoPanel />
+        <TouchableOpacity
+          style={styles.settingsButton}
+          onPress={() => setShowSettings(true)}
+        >
+          <Text>⚙️</Text>
+        </TouchableOpacity>
+
+        {showSettings ? (
+          <SettingsScreen onSave={() => setShowSettings(false)} />
+        ) : (
+          <>
+            <TodaySteps />
+            <SessionSteps />
+            <SessionTime />
+            <NextCheck />
+            <StartButton />
+            <ModePanel />
+            <SpeedPanel />
+            <AutoPanel />
+          </>
+        )}
       </View>
     </WalkingPadProvider>
   );
@@ -37,6 +53,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: '12%',
     fontSize: 18,
+  },
+  settingsButton: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    padding: 10,
   },
 });
 
