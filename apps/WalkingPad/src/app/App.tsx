@@ -1,44 +1,63 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import {
   AutoPanel,
   ModePanel,
-  NextCheck,
-  SessionSteps,
   SessionTime,
   SettingsScreen,
   SpeedPanel,
   StartButton,
-  TodaySteps,
+  Text,
 } from './components';
 import { WalkingPadProvider } from './contexts/WalkingPadContext';
+import { colors, spacing } from './theme';
+import { StepsCard } from './components/Steps';
+import { getSettings } from './storage';
 
 const App = (): JSX.Element => {
   const [showSettings, setShowSettings] = useState(false);
 
+  // Add effect to check settings on mount
+  useEffect(() => {
+    const checkSettings = async () => {
+      const settings = await getSettings();
+      if (!settings?.ip || !settings?.token) {
+        setShowSettings(true);
+      }
+    };
+    checkSettings();
+  }, []);
+
   return (
     <WalkingPadProvider>
       <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.settingsButton}
-          onPress={() => setShowSettings(true)}
-        >
-          <Text>⚙️</Text>
-        </TouchableOpacity>
-
         {showSettings ? (
           <SettingsScreen onSave={() => setShowSettings(false)} />
         ) : (
-          <>
-            <TodaySteps />
-            <SessionSteps />
-            <SessionTime />
-            <NextCheck />
-            <StartButton />
+          <View style={styles.contentContainer}>
+            <View style={styles.statsRow}>
+              <View style={styles.statsItem}>
+                <SessionTime />
+              </View>
+              <View style={styles.statsItem}>
+                <StepsCard />
+              </View>
+            </View>
             <ModePanel />
             <SpeedPanel />
-            <AutoPanel />
-          </>
+            <View style={styles.header}>
+              <View style={styles.autoContainer}>
+                <AutoPanel />
+              </View>
+              <TouchableOpacity
+                onPress={() => setShowSettings(true)}
+                style={styles.settingsButton}
+              >
+                <Text>⚙️</Text>
+              </TouchableOpacity>
+            </View>
+            <StartButton />
+          </View>
         )}
       </View>
     </WalkingPadProvider>
@@ -48,17 +67,39 @@ const App = (): JSX.Element => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
+    padding: spacing.md,
+  },
+  header: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: '12%',
-    fontSize: 18,
+    gap: spacing.md,
+    marginBottom: spacing.md,
+  },
+  autoContainer: {
+    flex: 1,
   },
   settingsButton: {
-    position: 'absolute',
-    top: 40,
-    right: 20,
-    padding: 10,
+    padding: spacing.sm,
+    backgroundColor: colors.surface,
+    borderRadius: spacing.sm,
+    shadowColor: colors.text.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  contentContainer: {
+    paddingTop: spacing.xl, // Add top padding to account for settings button
+    flex: 1,
+    gap: spacing.md,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  statsItem: {
+    flex: 1,
   },
 });
 

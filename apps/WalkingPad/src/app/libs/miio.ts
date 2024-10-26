@@ -8,18 +8,15 @@ export const miioInit = async () => {
 
   const settings = await getSettings();
   if (!settings?.ip || !settings?.token) {
+    console.log('Missing ip/token');
     return false;
   }
 
-  try {
-    device = await miio.device({
-      address: settings.ip,
-      token: settings.token,
-    });
-    console.log({ device });
-  } catch (e) {
-    console.error(e);
-  }
+  device = await miio.device({
+    address: settings.ip,
+    token: settings.token,
+  });
+  console.log({ device });
   return device !== null;
 };
 

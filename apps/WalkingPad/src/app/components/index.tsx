@@ -7,3 +7,7 @@ export * from './SessionTime';
 export * from './SessionSteps';
 export * from './SettingsScreen';
 export * from './TodaySteps';
+export * from './shared/Card';
+export * from './shared/Text';
+export * from './shared/TextInput';
+export * from './shared/Button';

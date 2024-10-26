@@ -1,20 +1,44 @@
 import React, { useContext } from 'react';
-import { Text, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { WalkingPadContext } from '../contexts/WalkingPadContext';
+import { Text } from './shared/Text';
+import { colors, spacing } from '../theme';
 
 const StartButton = (): JSX.Element => {
-  const { startRunning, run } = useContext(WalkingPadContext);
+  const { startRunning, run, ready } = useContext(WalkingPadContext);
+
+  if (!ready) return null;
+
   return (
-    <TouchableWithoutFeedback
-      onPress={(e) => {
-        startRunning();
-      }}
+    <TouchableOpacity
+      style={[styles.button, run ? styles.running : styles.stopped]}
+      onPress={startRunning}
     >
-      <Text style={{ fontSize: 34, color: '#027aff', marginTop: 30 }}>
-        {run ? '[RUNNING]' : 'START'}
+      <Text variant="h2" style={styles.buttonText}>
+        {run ? 'STOP' : 'START'}
       </Text>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    padding: spacing.lg,
+    borderRadius: spacing.lg,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: spacing.md,
+  },
+  running: {
+    backgroundColor: colors.secondary,
+  },
+  stopped: {
+    backgroundColor: colors.primary,
+  },
+  buttonText: {
+    color: colors.background,
+    fontWeight: '700',
+  },
+});
 
 export { StartButton };

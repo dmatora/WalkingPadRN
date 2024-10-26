@@ -1,49 +1,71 @@
 import React, { useContext } from 'react';
-import { Button, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { WalkingPadContext } from '../contexts/WalkingPadContext';
+import { Card } from './shared/Card';
+import { Text } from './shared/Text';
+import { colors, spacing } from '../theme';
+
+const styles = StyleSheet.create({
+  title: {
+    marginBottom: spacing.md,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  speedButton: {
+    flex: 1,
+    padding: spacing.sm,
+    borderRadius: spacing.xs,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: 'center',
+  },
+  speedButtonActive: {
+    backgroundColor: colors.primary,
+  },
+  speedButtonText: {
+    color: colors.text.primary,
+  },
+  speedButtonTextActive: {
+    color: colors.background,
+  },
+});
 
 const SpeedPanel = (): JSX.Element => {
-  const { speed, updateSpeed } = useContext(WalkingPadContext);
-  return (
-    <>
+  const { speed, updateSpeed, ready } = useContext(WalkingPadContext);
+
+  const SpeedButton = ({ value, label }: { value: number; label: string }) => (
+    <TouchableOpacity
+      style={[styles.speedButton, speed === value && styles.speedButtonActive]}
+      onPress={() => updateSpeed(value)}
+    >
       <Text
-        style={{
-          fontSize: 20,
-          marginTop: 80,
-        }}
+        style={[
+          styles.speedButtonText,
+          speed === value && styles.speedButtonTextActive,
+        ]}
       >
-        Select current/start speed
+        {label}
       </Text>
-      <Button title="" />
-      <View
-        style={{
-          // flex: 1,
-          flexDirection: 'row',
-          // justifyContent: 'space-between',
-        }}
-      >
-        <TouchableWithoutFeedback onPress={(e) => updateSpeed(5)}>
-          <Text style={{ fontSize: 30, color: '#027aff', marginRight: 30 }}>
-            {speed === 5 ? '[0.5]' : '0.5'}
-          </Text>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={(e) => updateSpeed(10)}>
-          <Text style={{ fontSize: 30, color: '#027aff', marginRight: 30 }}>
-            {speed === 10 ? '[1.0]' : '1.0'}
-          </Text>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={(e) => updateSpeed(15)}>
-          <Text style={{ fontSize: 30, color: '#027aff', marginRight: 30 }}>
-            {speed === 15 ? '[1.5]' : '1.5'}
-          </Text>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={(e) => updateSpeed(20)}>
-          <Text style={{ fontSize: 30, color: '#027aff' }}>
-            {speed === 20 ? '[2.0]' : '2.0'}
-          </Text>
-        </TouchableWithoutFeedback>
+    </TouchableOpacity>
+  );
+
+  if (!ready) return null;
+
+  return (
+    <Card>
+      <Text variant="h2" style={styles.title}>
+        Speed
+      </Text>
+      <View style={styles.buttonContainer}>
+        <SpeedButton value={5} label="0.5" />
+        <SpeedButton value={10} label="1.0" />
+        <SpeedButton value={15} label="1.5" />
+        <SpeedButton value={20} label="2.0" />
       </View>
-    </>
+    </Card>
   );
 };
 

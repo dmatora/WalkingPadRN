@@ -1,38 +1,75 @@
 import React, { useContext } from 'react';
-import { Text, TouchableWithoutFeedback, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { WalkingPadContext } from '../contexts/WalkingPadContext';
+import { Card } from './shared/Card';
+import { Text } from './shared/Text';
+import { colors, spacing } from '../theme';
+
+const styles = StyleSheet.create({
+  title: {
+    marginBottom: spacing.md,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  modeButton: {
+    flex: 1,
+    padding: spacing.md,
+    borderRadius: spacing.xs,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: 'center',
+  },
+  modeButtonActive: {
+    backgroundColor: colors.primary,
+  },
+  modeButtonText: {
+    color: colors.text.primary,
+  },
+  modeButtonTextActive: {
+    color: colors.background,
+  },
+});
 
 const ModePanel = (): JSX.Element => {
-  const { mode, updateMode } = useContext(WalkingPadContext);
-  return (
-    <View
-      style={{
-        // flex: 1,
-        marginTop: 20,
-        flexDirection: 'row',
-        // justifyContent: 'space-between',
-      }}
+  const { mode, updateMode, ready } = useContext(WalkingPadContext);
+
+  const ModeButton = ({
+    value,
+    label,
+  }: {
+    value: 'manual' | 'standby';
+    label: string;
+  }) => (
+    <TouchableOpacity
+      style={[styles.modeButton, mode === value && styles.modeButtonActive]}
+      onPress={() => updateMode(value)}
     >
-      <TouchableWithoutFeedback
-        onPress={(e) => {
-          updateMode('manual');
-        }}
+      <Text
+        style={[
+          styles.modeButtonText,
+          mode === value && styles.modeButtonTextActive,
+        ]}
       >
-        <Text style={{ fontSize: 34, color: '#027aff', marginRight: 40 }}>
-          {mode === 'manual' ? '[MANUAL]' : 'MANUAL'}
-        </Text>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback
-        onPress={(e) => {
-          updateMode('standby');
-        }}
-      >
-        <Text style={{ fontSize: 34, color: '#027aff' }}>
-          {mode === 'standby' ? '[STANDBY]' : 'STANDBY'}
-        </Text>
-      </TouchableWithoutFeedback>
-    </View>
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
+
+  if (!ready) return null;
+
+  return (
+    <Card>
+      <Text variant="h2" style={styles.title}>
+        Mode
+      </Text>
+      <View style={styles.buttonContainer}>
+        <ModeButton value="manual" label="Manual" />
+        <ModeButton value="standby" label="Standby" />
+      </View>
+    </Card>
   );
 };
-
 export { ModePanel };

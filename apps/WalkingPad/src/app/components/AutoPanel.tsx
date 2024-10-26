@@ -1,49 +1,51 @@
 import React, { useContext } from 'react';
-import { Button, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { WalkingPadContext } from '../contexts/WalkingPadContext';
+import { Card } from './shared/Card';
+import { Text } from './shared/Text';
+import { colors, spacing } from '../theme';
+
+const StatusIndicator = ({ active }: { active: boolean }) => (
+  <View
+    style={[
+      styles.indicator,
+      active ? styles.indicatorActive : styles.indicatorInactive,
+    ]}
+  />
+);
 
 const AutoPanel = (): JSX.Element => {
-  const { auto, updateAuto } = useContext(WalkingPadContext);
+  const { auto, ready } = useContext(WalkingPadContext);
+
+  if (!ready) return null;
+
   return (
-    <>
-      <Button title="" />
-      <Text
-        style={{
-          fontSize: 20,
-          marginTop: 80,
-        }}
-      >
-        Auto start / stop in manual mode
-      </Text>
-      <Button title="" />
-      <View
-        style={{
-          // flex: 1,
-          flexDirection: 'row',
-          // justifyContent: 'space-between',
-        }}
-      >
-        <TouchableWithoutFeedback
-          onPress={(e) => {
-            updateAuto(true);
-          }}
-        >
-          <Text style={{ fontSize: 30, color: '#027aff', marginRight: 84 }}>
-            {auto ? '[ON]' : 'ON'}
-          </Text>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback
-          onPress={(e) => {
-            updateAuto(false);
-          }}
-        >
-          <Text style={{ fontSize: 30, color: '#027aff' }}>
-            {!auto ? '[OFF]' : 'OFF'}
-          </Text>
-        </TouchableWithoutFeedback>
+    <Card>
+      <View style={styles.statusItem}>
+        <StatusIndicator active={auto} />
+        <Text>Auto Start/Stop in manual mode</Text>
       </View>
-    </>
+    </Card>
   );
 };
+
+const styles = StyleSheet.create({
+  statusItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+  indicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  indicatorActive: {
+    backgroundColor: colors.primary,
+  },
+  indicatorInactive: {
+    backgroundColor: colors.text.disabled,
+  },
+});
 
 export { AutoPanel };

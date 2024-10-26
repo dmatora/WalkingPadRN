@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Button } from './shared/Button';
+import { Text } from './shared/Text';
+import { TextInput } from './shared/TextInput';
+import { spacing } from '../theme';
 import { getSettings, saveSettings } from '../storage';
 
 export const SettingsScreen = ({
@@ -12,17 +16,17 @@ export const SettingsScreen = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadSettings = async () => {
-      const settings = await getSettings();
-      if (settings) {
-        setIp(settings.ip);
-        setToken(settings.token);
-      }
-      setLoading(false);
-    };
-
     loadSettings();
   }, []);
+
+  const loadSettings = async () => {
+    const settings = await getSettings();
+    if (settings) {
+      setIp(settings.ip);
+      setToken(settings.token);
+    }
+    setLoading(false);
+  };
 
   const handleSave = async () => {
     await saveSettings({ ip, token });
@@ -35,31 +39,51 @@ export const SettingsScreen = ({
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        value={ip}
-        onChangeText={setIp}
-        placeholder="IP Address"
-      />
-      <TextInput
-        style={styles.input}
-        value={token}
-        onChangeText={setToken}
-        placeholder="Token"
-      />
-      <Button title="Save" onPress={handleSave} />
+      <Text variant="h1" style={styles.title}>
+        Settings
+      </Text>
+
+      <View style={styles.inputGroup}>
+        <Text variant="body">Device IP</Text>
+        <TextInput
+          value={ip}
+          onChangeText={setIp}
+          placeholder="192.168.1.100"
+          style={styles.input}
+        />
+      </View>
+
+      <View style={styles.inputGroup}>
+        <Text variant="body">Device Token</Text>
+        <TextInput
+          value={token}
+          onChangeText={setToken}
+          placeholder="Enter device token"
+          style={styles.input}
+        />
+      </View>
+
+      <Button variant="primary" onPress={handleSave} style={styles.saveButton}>
+        Save Settings
+      </Button>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: spacing.lg,
+  },
+  title: {
+    marginBottom: spacing.xl,
+  },
+  inputGroup: {
+    marginBottom: spacing.lg,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 10,
+    marginTop: spacing.xs,
+  },
+  saveButton: {
+    marginTop: spacing.xl,
   },
 });
