@@ -1,0 +1,9 @@
+{
+  "name": "WalkingPad",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/WalkingPad/src",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project WalkingPad --web",
+  "targets": {}
+}
