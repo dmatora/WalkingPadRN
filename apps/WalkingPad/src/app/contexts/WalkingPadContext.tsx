@@ -22,6 +22,7 @@ interface WalkingPadContextProps {
   updateAuto: (auto: boolean) => void;
   updateMode: (mode: 'manual' | 'standby') => void;
   startRunning: () => void;
+  stopRunning: () => void;
 }
 
 interface WalkingPadProviderProps {
@@ -42,6 +43,7 @@ export const WalkingPadContext = createContext<WalkingPadContextProps>({
   updateAuto: () => {},
   updateMode: () => {},
   startRunning: () => {},
+  stopRunning: () => {},
 });
 
 let lastStepsValue: number | null = null;
@@ -84,10 +86,13 @@ export const WalkingPadProvider: React.FC<WalkingPadProviderProps> = ({
   };
 
   const startRunning = async () => {
-    const mode = await miioSend('set_mode', [1]); // set mode to manual
-    setMode(mode === 1 ? 'manual' : 'standby');
+    await updateMode('manual');
     setRun((await miioSend('set_state', 'run')) === 'ok');
     // startMonitoring();
+  };
+
+  const stopRunning = async () => {
+    await updateMode('standby');
   };
 
   const updateSpeed = async (speed: number) => {
@@ -208,6 +213,7 @@ export const WalkingPadProvider: React.FC<WalkingPadProviderProps> = ({
         updateAuto,
         updateMode,
         startRunning,
+        stopRunning,
       }}
     >
       {children}

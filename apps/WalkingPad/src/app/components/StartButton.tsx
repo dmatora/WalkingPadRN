@@ -5,17 +5,18 @@ import { Text } from './shared/Text';
 import { colors, spacing } from '../theme';
 
 const StartButton = (): JSX.Element => {
-  const { startRunning, run, ready } = useContext(WalkingPadContext);
+  const { startRunning, stopRunning, run, ready } =
+    useContext(WalkingPadContext);
 
   if (!ready) return null;
 
   return (
     <TouchableOpacity
       style={[styles.button, run ? styles.running : styles.stopped]}
-      onPress={startRunning}
+      onPress={run ? stopRunning : startRunning}
     >
       <Text variant="h2" style={styles.buttonText}>
-        {run ? 'STOP' : 'START'}
+        {run ? 'STOP (and reset session steps)' : 'START'}
       </Text>
     </TouchableOpacity>
   );
