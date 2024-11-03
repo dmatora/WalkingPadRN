@@ -1,13 +1,17 @@
-import React, { createContext, ReactNode, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { miioInit, miioSend } from '../libs/miio';
 import { getTodaySteps, initHealthKit, saveSteps } from '../libs/healthKit';
-// import KeepAwake from 'react-native-keep-awake';
 import {
   activateKeepAwake,
   deactivateKeepAwake,
 } from '@sayem314/react-native-keep-awake';
 
-// Define the shape of the context
 interface WalkingPadContextProps {
   auto: boolean | null;
   ready: boolean | null;
@@ -47,12 +51,14 @@ export const WalkingPadContext = createContext<WalkingPadContextProps>({
 });
 
 let lastStepsValue: number | null = null;
-let interval: any;
+let interval: number | null = null;
+
+export const useWalkingPad = () => useContext(WalkingPadContext);
 
 export const WalkingPadProvider: React.FC<WalkingPadProviderProps> = ({
   children,
 }) => {
-  const [initialized, setInitialized] = useState<boolean>(false);
+  const [initialized, setInitialized] = useState(false);
   const [run, setRun] = useState<boolean | null>(null);
   const [auto, setAuto] = useState<boolean | null>(null);
   const [speed, setSpeed] = useState<number | null>(null);
@@ -68,12 +74,11 @@ export const WalkingPadProvider: React.FC<WalkingPadProviderProps> = ({
     if (interval) {
       return;
     }
-    console.log('Setting up interval');
     interval = setInterval(async () => {
       const now = new Date();
       const currentSecond = now.getSeconds();
       setLeftSeconds(60 - currentSecond);
-      // console.log({currentSecond});
+
       if (currentSecond % 2 !== 0) {
         return;
       }
@@ -154,9 +159,7 @@ export const WalkingPadProvider: React.FC<WalkingPadProviderProps> = ({
       }
     });
 
-    // Return a cleanup function to remove any event listeners and clear the interval
     return () => {
-      // clearInterval(interval);
     };
   }, []);
 
@@ -187,13 +190,8 @@ export const WalkingPadProvider: React.FC<WalkingPadProviderProps> = ({
     updateAuto(!run);
     if (run) {
       activateKeepAwake();
-      // KeepAwake.activate();
-      // startMonitoring();
     } else {
       deactivateKeepAwake();
-      // KeepAwake.deactivate();
-      // console.log('Clearing interval');
-      // clearInterval(interval);
     }
   }, [run, initialized]);
 

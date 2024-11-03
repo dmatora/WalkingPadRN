@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { WalkingPadContext } from '../contexts/WalkingPadContext';
+import { useWalkingPad } from '../contexts/WalkingPadContext';
 import { Card } from './shared/Card';
 import { Text } from './shared/Text';
 import { spacing } from '../theme';
 
 export const SessionTime = (): JSX.Element => {
-  const { time, leftSeconds } = useContext(WalkingPadContext);
+  const { time, leftSeconds } = useWalkingPad();
 
   let displayTime = '00:00:00';
   if (time) {

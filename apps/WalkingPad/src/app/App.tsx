@@ -14,6 +14,14 @@ import { colors, spacing } from './theme';
 import { StepsCard } from './components/Steps';
 import { getSettings } from './storage';
 
+const SetupProviders = (): JSX.Element => {
+  return (
+    <WalkingPadProvider>
+      <App />
+    </WalkingPadProvider>
+  );
+};
+
 const App = (): JSX.Element => {
   const [showSettings, setShowSettings] = useState(false);
 
@@ -29,38 +37,36 @@ const App = (): JSX.Element => {
   }, []);
 
   return (
-    <WalkingPadProvider>
-      <View style={styles.container}>
-        {showSettings ? (
-          <SettingsScreen onSave={() => setShowSettings(false)} />
-        ) : (
-          <View style={styles.contentContainer}>
-            <View style={styles.statsRow}>
-              <View style={styles.statsItem}>
-                <SessionTime />
-              </View>
-              <View style={styles.statsItem}>
-                <StepsCard />
-              </View>
+    <View style={styles.container}>
+      {showSettings ? (
+        <SettingsScreen onSave={() => setShowSettings(false)} />
+      ) : (
+        <View style={styles.contentContainer}>
+          <View style={styles.statsRow}>
+            <View style={styles.statsItem}>
+              <SessionTime />
             </View>
-            <ModePanel />
-            <SpeedPanel />
-            <View style={styles.header}>
-              <View style={styles.autoContainer}>
-                <AutoPanel />
-              </View>
-              <TouchableOpacity
-                onPress={() => setShowSettings(true)}
-                style={styles.settingsButton}
-              >
-                <Text>⚙️</Text>
-              </TouchableOpacity>
+            <View style={styles.statsItem}>
+              <StepsCard />
             </View>
-            <StartButton />
           </View>
-        )}
-      </View>
-    </WalkingPadProvider>
+          <ModePanel />
+          <SpeedPanel />
+          <View style={styles.header}>
+            <View style={styles.autoContainer}>
+              <AutoPanel />
+            </View>
+            <TouchableOpacity
+              onPress={() => setShowSettings(true)}
+              style={styles.settingsButton}
+            >
+              <Text>⚙️</Text>
+            </TouchableOpacity>
+          </View>
+          <StartButton />
+        </View>
+      )}
+    </View>
   );
 };
 
@@ -103,4 +109,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default SetupProviders;

@@ -1,16 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { WalkingPadContext } from '../contexts/WalkingPadContext';
+import { useWalkingPad } from '../contexts/WalkingPadContext';
 import { Card } from './shared/Card';
 import { Text } from './shared/Text';
 import { spacing } from '../theme';
 
 export const StepsCard = (): JSX.Element => {
-  const { steps, todaySteps } = useContext(WalkingPadContext);
+  const { steps, todaySteps } = useWalkingPad();
 
   return (
     <Card>
-      {/*<Text style={styles.label}>Steps</Text>*/}
       <Text style={styles.icon}>👟 </Text>
       <View style={styles.row}>
         <Text variant="caption" style={styles.label}>
@@ -40,7 +39,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // marginBottom: spacing.sm,
   },
   label: {
     textTransform: 'uppercase',

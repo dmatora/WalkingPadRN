@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { WalkingPadContext } from '../contexts/WalkingPadContext';
+import { useWalkingPad } from '../contexts/WalkingPadContext';
 import { Card } from './shared/Card';
 import { Text } from './shared/Text';
 import { colors, spacing } from '../theme';
@@ -15,7 +15,7 @@ const StatusIndicator = ({ active }: { active: boolean }) => (
 );
 
 const AutoPanel = (): JSX.Element => {
-  const { auto, ready } = useContext(WalkingPadContext);
+  const { auto, ready } = useWalkingPad();
 
   if (!ready) return null;
 

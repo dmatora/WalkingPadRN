@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { WalkingPadContext } from '../contexts/WalkingPadContext';
+import { useWalkingPad } from '../contexts/WalkingPadContext';
 import { Text } from './shared/Text';
 import { colors, spacing } from '../theme';
 
 const StartButton = (): JSX.Element => {
-  const { startRunning, stopRunning, run, ready } =
-    useContext(WalkingPadContext);
+  const { startRunning, stopRunning, run, ready } = useWalkingPad();
 
   if (!ready) return null;
 

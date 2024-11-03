@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { WalkingPadContext } from '../contexts/WalkingPadContext';
+import { useWalkingPad } from '../contexts/WalkingPadContext';
 import { Card } from './shared/Card';
 import { Text } from './shared/Text';
 import { colors, spacing } from '../theme';
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 });
 
 const SpeedPanel = (): JSX.Element => {
-  const { speed, updateSpeed, ready } = useContext(WalkingPadContext);
+  const { speed, updateSpeed, ready } = useWalkingPad();
 
   const SpeedButton = ({ value, label }: { value: number; label: string }) => (
     <TouchableOpacity
