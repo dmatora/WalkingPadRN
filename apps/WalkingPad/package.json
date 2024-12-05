@@ -17,6 +17,7 @@
     "@nx/react": "*",
     "@sayem314/react-native-keep-awake": "*",
     "@react-native-async-storage/async-storage": "*",
+    "@react-native-community/netinfo": "*",
     "rn-apple-healthkit": "*",
     "react-native-quick-crypto": "*",
     "buffer": "*",

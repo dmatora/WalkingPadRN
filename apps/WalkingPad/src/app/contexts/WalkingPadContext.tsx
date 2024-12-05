@@ -5,12 +5,13 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { miioInit, miioSend } from '../libs/miio';
+import { miioSend } from '../libs/miio'; // remove miioInit import
 import { getTodaySteps, initHealthKit, saveSteps } from '../libs/healthKit';
 import {
   activateKeepAwake,
   deactivateKeepAwake,
 } from '@sayem314/react-native-keep-awake';
+import { useWalkingPadSocket } from './SocketContext'; // Import from SocketContext
 
 interface WalkingPadContextProps {
   auto: boolean | null;
@@ -58,6 +59,8 @@ export const useWalkingPad = () => useContext(WalkingPadContext);
 export const WalkingPadProvider: React.FC<WalkingPadProviderProps> = ({
   children,
 }) => {
+  const { connected } = useWalkingPadSocket();
+
   const [initialized, setInitialized] = useState(false);
   const [run, setRun] = useState<boolean | null>(null);
   const [auto, setAuto] = useState<boolean | null>(null);
@@ -133,49 +136,53 @@ export const WalkingPadProvider: React.FC<WalkingPadProviderProps> = ({
     return running;
   };
 
-  const updateTodaySteps = async (skipCheck = false) => {
-    if (!skipCheck && !healthKitReady) {
-      return;
-    }
-    const todaySteps = await getTodaySteps();
-    setTodaySteps(todaySteps);
+  const updateTodaySteps = async () => {
+    if (!healthKitReady) return;
+    const today = await getTodaySteps();
+    setTodaySteps(today);
   };
 
   useEffect(() => {
-    console.log('initializing');
-    miioInit().then(async (success) => {
+    initHealthKit().then((success) => {
       if (success) {
-        setReady(true);
-        initHealthKit().then((success) => {
-          if (success) {
-            setHealthKitReady(success);
-            updateTodaySteps(true);
-          }
-        });
-        await updateAll();
-        setSpeed(10 * (await miioSend('get_prop', 'start_speed')));
-        startMonitoring();
-        setInitialized(true);
+        setHealthKitReady(true);
+        updateTodaySteps();
       }
     });
-
-    return () => {
-    };
   }, []);
 
   useEffect(() => {
-    if (!steps) {
-      return;
+    updateTodaySteps();
+  }, [healthKitReady]);
+
+  // When connection status changes:
+  useEffect(() => {
+    if (connected) {
+      setReady(true);
+      // Fetch initial values
+      updateAll().then(async () => {
+        const startSpeed = await miioSend('get_prop', 'start_speed');
+        setSpeed(10 * startSpeed);
+        startMonitoring();
+        setInitialized(true);
+      });
+    } else {
+      // Not connected
+      setReady(false);
+      setInitialized(false);
     }
+  }, [connected]);
+
+  // On steps change, update health data
+  useEffect(() => {
+    if (!steps) return;
+
     if (lastStepsValue === null) {
       lastStepsValue = steps;
       return;
     }
     const increment = steps - lastStepsValue;
-    if (!increment) {
-      return;
-    }
-    if (increment < 0) {
+    if (increment <= 0) {
       lastStepsValue = steps;
       return;
     }

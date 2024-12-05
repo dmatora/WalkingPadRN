@@ -9,21 +9,29 @@ import {
   StartButton,
   Text,
 } from './components';
-import { WalkingPadProvider } from './contexts/WalkingPadContext';
+import {
+  SocketProvider,
+  useWalkingPadSocket,
+  WalkingPadProvider,
+} from './contexts';
+
 import { colors, spacing } from './theme';
 import { StepsCard } from './components/Steps';
 import { getSettings } from './storage';
 
 const SetupProviders = (): JSX.Element => {
   return (
-    <WalkingPadProvider>
-      <App />
-    </WalkingPadProvider>
+    <SocketProvider>
+      <WalkingPadProvider>
+        <App />
+      </WalkingPadProvider>
+    </SocketProvider>
   );
 };
 
 const App = (): JSX.Element => {
   const [showSettings, setShowSettings] = useState(false);
+  const { connected } = useWalkingPadSocket();
 
   // Add effect to check settings on mount
   useEffect(() => {
@@ -42,6 +50,11 @@ const App = (): JSX.Element => {
         <SettingsScreen onSave={() => setShowSettings(false)} />
       ) : (
         <View style={styles.contentContainer}>
+          {!connected && (
+            <View style={styles.connectionWarning}>
+              <Text style={styles.warningText}>Connecting to device...</Text>
+            </View>
+          )}
           <View style={styles.statsRow}>
             <View style={styles.statsItem}>
               <SessionTime />
@@ -106,6 +119,17 @@ const styles = StyleSheet.create({
   },
   statsItem: {
     flex: 1,
+  },
+  connectionWarning: {
+    backgroundColor: colors.secondary,
+    padding: spacing.sm,
+    alignItems: 'center',
+    borderRadius: spacing.sm,
+    marginBottom: spacing.md,
+  },
+  warningText: {
+    color: colors.background,
+    fontWeight: '500',
   },
 });
 

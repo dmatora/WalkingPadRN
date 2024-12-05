@@ -941,6 +941,8 @@ PODS:
     - React-debug
   - react-native-keep-awake (1.2.4):
     - React-Core
+  - react-native-netinfo (11.4.1):
+    - React-Core
   - react-native-quick-crypto (0.7.5):
     - DoubleConversion
     - glog
@@ -1238,6 +1240,7 @@ DEPENDENCIES:
   - React-logger (from `../../../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../../../node_modules/react-native/ReactCommon`)
   - "react-native-keep-awake (from `../../../node_modules/@sayem314/react-native-keep-awake`)"
+  - "react-native-netinfo (from `../../../node_modules/@react-native-community/netinfo`)"
   - react-native-quick-crypto (from `../../../node_modules/react-native-quick-crypto`)
   - react-native-udp (from `../../../node_modules/react-native-udp`)
   - React-nativeconfig (from `../../../node_modules/react-native/ReactCommon`)
@@ -1339,6 +1342,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/react-native/ReactCommon"
   react-native-keep-awake:
     :path: "../../../node_modules/@sayem314/react-native-keep-awake"
+  react-native-netinfo:
+    :path: "../../../node_modules/@react-native-community/netinfo"
   react-native-quick-crypto:
     :path: "../../../node_modules/react-native-quick-crypto"
   react-native-udp:
@@ -1431,6 +1436,7 @@ SPEC CHECKSUMS:
   React-logger: 7e7403a2b14c97f847d90763af76b84b152b6fce
   React-Mapbuffer: 11029dcd47c5c9e057a4092ab9c2a8d10a496a33
   react-native-keep-awake: a15b33cd9b94a2da9b0a1c50ac64ac2391d3e330
+  react-native-netinfo: f0a9899081c185db1de5bb2fdc1c88c202a059ac
   react-native-quick-crypto: 7085e4e4607e7e8fa57f4193f994d5262d351e45
   react-native-udp: df79c3cb72c4e71240cd3ce4687bfb8a137140d5
   React-nativeconfig: b0073a590774e8b35192fead188a36d1dca23dec
