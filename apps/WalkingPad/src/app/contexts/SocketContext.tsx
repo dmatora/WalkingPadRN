@@ -98,15 +98,29 @@ export const SocketProvider: React.FC<{ children: ReactNode }> = ({
   }, [connected]);
 
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
     const unsubscribe = NetInfo.addEventListener((state) => {
-      if (state.isConnected && !connected) {
-        connectSocket();
-      } else if (!state.isConnected) {
+      if (state.isConnected) {
+        // Debounce the connection attempt to avoid rapid connect/disconnect
+        timeoutId = setTimeout(() => {
+          if (!connected) {
+            connectSocket();
+          }
+        }, 500); // wait half a second
+      } else {
+        // Network not connected, disconnect immediately and clear pending attempts
         disconnectSocket();
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
+        }
       }
     });
 
     return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
       unsubscribe();
     };
   }, [connected]);
