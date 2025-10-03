@@ -110,3 +110,8 @@ yarn-error.log
 # testing
 /coverage
 
+
+# Code-Forge generated files
+update.sh
+.code-forge/
+.gemini/
