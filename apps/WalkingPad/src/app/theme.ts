@@ -40,4 +40,4 @@ export const typography = {
     fontWeight: '400',
     lineHeight: 20,
   },
-}
+} as const;

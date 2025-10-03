@@ -52,7 +52,7 @@ export const WalkingPadContext = createContext<WalkingPadContextProps>({
 });
 
 let lastStepsValue: number | null = null;
-let interval: number | null = null;
+let interval: ReturnType<typeof setInterval> | null = null;
 
 export const useWalkingPad = () => useContext(WalkingPadContext);
 
