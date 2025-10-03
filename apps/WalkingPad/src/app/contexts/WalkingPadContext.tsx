@@ -104,13 +104,21 @@ export const WalkingPadProvider: React.FC<WalkingPadProviderProps> = ({
   };
 
   const updateSpeed = async (speed: number) => {
-    if (!run) {
-      return;
-    }
-    const response = await miioSend('set_speed', [speed / 10]);
-    if (response === 'ok') {
-      setSpeed(speed);
-      await miioSend('set_start_speed', [speed / 10]);
+    const decimal = speed / 10;
+    try {
+      if (run) {
+        const response = await miioSend('set_speed', [decimal]);
+        if (response === 'ok') {
+          setSpeed(speed);
+          await miioSend('set_start_speed', [decimal]);
+        }
+      } else {
+        // When not running, set planned start speed and update local state
+        await miioSend('set_start_speed', [decimal]);
+        setSpeed(speed);
+      }
+    } catch (e) {
+      console.error('Failed to update speed', e);
     }
   };
 
