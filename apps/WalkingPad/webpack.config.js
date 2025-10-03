@@ -19,7 +19,7 @@ module.exports = {
       index: './src/index.html',
       outputPath: 'dist/apps/WalkingPad',
       baseHref: '/',
-      assets: ['./src/favicon.ico', './src/assets'],
+      assets: ['./src/assets'],
       styles: [],
       outputHashing: process.env['NODE_ENV'] === 'production' ? 'all' : 'none',
       optimization: process.env['NODE_ENV'] === 'production',
